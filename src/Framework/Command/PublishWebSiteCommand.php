@@ -51,7 +51,7 @@ class PublishWebSiteCommand extends Command
     {
         $this
         // the name of the command (the part after "bin/console")
-        ->setName('aspi:pulish-blank-website')
+        ->setName('aspi:publish-blank-website')
 
         // the short description shown while running "php bin/console list"
         ->setDescription($this->title)
