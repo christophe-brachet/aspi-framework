@@ -146,7 +146,7 @@ extension="imap.so"
 ```
 Step 6 - Install aspi-framework project from composer
 ```sh
-composer create-project aspi-components/framework aspi-app
+composer create-project aspi-components/framework:dev-master aspi-app
 ```
 
 
