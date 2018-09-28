@@ -146,7 +146,19 @@ extension="imap.so"
 ```
 Step 6 - Install aspi-framework project from composer
 ```sh
-composer create-project aspi-components/framework:dev-master aspi-app
+Brachets-Mac-mini:Desktop cbrachet$ composer create-project aspi-components/framework:dev-master aspi-app
+```
+Step 7 - Go to application directy
+```sh
+Brachets-Mac-mini:Desktop cbrachet$ cd aspi-app
+```
+Step 8 - Publish site
+```sh
+Brachets-Mac-mini:aspi-app cbrachet$ php bin/console aspi:publish-blank-website
+```
+Step 9 - Start website
+```sh
+Brachets-Mac-mini:aspi-app cbrachet$ php bin/console aspi:webserver
 ```
 
 
