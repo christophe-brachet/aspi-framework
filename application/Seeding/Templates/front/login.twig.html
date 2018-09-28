@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{{aspi_title()}} - {{"login"|trans }}</title>
+
+    <!-- Bootstrap core CSS-->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/login.css" rel="stylesheet">
+
+  </head>
+
+  <body class="bg-dark">
+
+    <div class="container">
+      <div class="card card-login mx-auto mt-5">
+        <div class="card-header">{{"login"|trans }}</div>
+        <div class="card-body">
+            <img id="profile-img" class="profile-img-card" src="/images/login.png" />
+          <form method="post" id="login-form">
+            <div class="form-group">
+              <div class="form-label-group">
+               {{ form.getField('email')|raw  }}
+                <label for="inputEmail">{{ form.getField('email').getLabel() }}</label>
+                {% if form.getField('email').hasErrors()  %}
+                <div class="invalid-feedback">
+                  <ul>
+                  {%  for error in  form.getField('email').getErrors()  %}
+                    <li>{{ error }}</li>
+                  {%  endfor %}
+                  </ul>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-label-group">
+                {{ form.getField('password')|raw  }}
+                <label for="inputPassword">{{ form.getField('password').getLabel() }}</label>
+                {% if form.getField('password').hasErrors()  %}
+                <div class="invalid-feedback">
+                  <ul>
+                  {%  for error in  form.getField('password').getErrors()  %}
+                    <li>{{ error }}</li>
+                  {%  endfor %}
+                  </ul>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+             {{ form.getField('submit')|raw }}
+          </form>
+          <div class="text-center">
+              <a class="d-block small mt-3" href="{{ path('homepage.'~language) }}">{{"home"|trans }}</a>
+            <a class="d-block small mt-3" href="register.html">Register an Account</a>
+            <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  </body>
+
+</html>

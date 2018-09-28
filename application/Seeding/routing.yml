@@ -1,0 +1,8 @@
+# routes.yaml
+homepage:
+    locales:  { en: "/welcome", fr: "/bienvenue", de: "/willkommen" }
+    defaults: { _controller: '\Controller\Home::Index'}
+
+loginpage:
+    locales:  { en: "/login", fr: "/se-connecter"}    
+    defaults: { _controller: '\Controller\Home::Login' }

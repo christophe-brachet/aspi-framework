@@ -1,0 +1,12 @@
+{
+    "home": "Accueil",
+    "readme" : "En savoir plus ...",
+    "login": "Se connecter",
+    "about": "A propos",
+    "password": "Mot de passe",
+    "email":"Adresse électronique",
+    "empty-email" : "L'adresse de messagerie ne doit pas être vide.",
+    "miss-formatted-email": "L'adresse de messagerie saisie est mal formatée.",
+    "password-between": "Le mot de passe doit être entre 15 et 20 caractères.",
+    "contact-us": "Nous contacter"
+}

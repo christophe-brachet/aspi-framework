@@ -1,0 +1,12 @@
+{
+    "home": "Home",
+    "login": "Login",
+    "about": "About",
+    "readme" : "Readme ...",
+    "password": "Password",
+    "email": "E-mail",
+    "empty-email" : "E-mail address musn't be empty.",
+    "miss-formatted-email": "E-mail address entered is incorrectly formatted.",
+    "password-between": "Password must be between 15 and 20 characters.",
+    "contact-us": "Contact Us"
+}

@@ -1,0 +1,41 @@
+{
+    "name": "aspi/framework",
+    "description": "A standalone framework used in ASPI CMS",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christophe Brachet",
+            "email": "contact@brachet-breizh.fr"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Aspi\\": "src/",
+            "Controller\\": "application/Controller"
+        }
+    },
+    "require": {
+        "php": "^5.5.9|^7.0",
+        "pimple/pimple": "~3.0",
+        "psr/http-message": "^1.0",
+        "twig/twig": "^2.0",
+        "filp/whoops": "^2.2",
+        "symfony/routing": "^4.1",
+        "symfony/config": "^4.1",
+        "symfony/yaml": "^4.1",
+        "doctrine/orm": "^2.6",
+        "nette/security": "^2.4",
+        "symfony/console": "^4.1",
+        "noodlehaus/config": "^0.8.2",
+        "symfony/translation": "^4.1",
+        "symfony/twig-bridge": "^4.1",
+        "katzien/php-mime-type": "^2.1",
+        "maximebf/debugbar": "^1.15",
+        "symfony/serializer": "^4.1",
+        "symfony/property-access": "^4.1",
+        "gedmo/doctrine-extensions": "^2.4",
+        "popphp/pop-validator": "^3.0",
+        "popphp/pop-dom": "^3.2",
+        "zendframework/zend-diactoros": "^1.8.6"
+    }
+}
