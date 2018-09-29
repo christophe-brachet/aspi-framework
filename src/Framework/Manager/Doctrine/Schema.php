@@ -32,6 +32,7 @@ use \Doctrine\ORM\Tools\Setup;
 use \Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\DBAL\Types\Type;
+use Pimple\Container;
 
 class Schema
 {
@@ -43,10 +44,18 @@ class Schema
      );
      private $config = null;
      private $createdTables = array();
-     public function __construct()
+     public function __construct(Container $container)
      {
-        $arrayEntities = array(__DIR__.'/../../Entity');
-        $this->config = Setup::createAnnotationMetadataConfiguration($arrayEntities,true);
+   
+        if($container['isCMS'])
+        {
+          $locations =  array(__DIR__.'/../../../../../../../src/CMS/Entity');
+        }
+        else
+        {
+            $locations = array(__DIR__.'/../Entity');
+        }
+        $this->config = Setup::createAnnotationMetadataConfiguration($locations,true);
      }
      public function connectRootUser(string $rootPassword)
      {

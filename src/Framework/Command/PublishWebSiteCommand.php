@@ -164,20 +164,6 @@ class PublishWebSiteCommand extends Command
                         $table->render();
                         $this->container['DatabaseConfig']->writeFile($dbName,$userFramework,$passwordFramework);
                         $templatesSeedingPath =__DIR__.'/../Seeding/Templates/';
-                        //layoutContent
-                       // $layoutContent = file_get_contents($templatesSeedingPath.'layout/front.twig.html');
-                       // $this->container['TemplateManager']->add('layout/front.twig.html',$layoutContent);
-                        //indexContent
-                       // $indexContent = file_get_contents($templatesSeedingPath.'front/index.twig.html');
-                       // $this->container['TemplateManager']->add('front/index.twig.html',$indexContent);
-
-                        //$loginContent =  file_get_contents($templatesSeedingPath.'front/login.twig.html');
-                        //$this->container['TemplateManager']->add('front/login.twig.html',$loginContent);
-
-                       /* $pictureSeedingPath =__DIR__.'/../Seeding/Public/';
-                        $filePath =  $pictureSeedingPath.'superman.jpeg';
-                        $blob = file_get_contents($filePath);
-                        $this->container['FileManager']->add('image/jpg','/images/superman.jpg',$blob); */
 
                         $source = __DIR__.'/../../../application/Seeding/Templates';
                         $directoryIterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
@@ -236,6 +222,14 @@ class PublishWebSiteCommand extends Command
                                                 	
                     }
                 }
-                $io->success('CMS ready to use !');
+                if($this->container['isCMS'])
+                {
+                    $io->success('CMS ready to use !');
+                }
+                else
+                {
+                    $io->success('Framework ready to use !');
+                }
+             
     }
 }

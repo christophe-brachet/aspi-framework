@@ -39,9 +39,16 @@ class Template
         
         $this->container = $container;
     }
-    public function add(string $name, string $source) : \Aspi\Framework\Entity\Template{
+    public function add(string $name, string $source)
+    {
         //Create Default Theme
-          $template = new   \Aspi\Framework\Entity\Template();
+          if(!$this->container['isCMS'])
+          {
+            $template = new   \Aspi\Framework\Entity\Template();
+          }
+          else {
+            $template = new   \Aspi\CMS\Entity\Template(); 
+          }
           $template->setName($name);
           $template->setSource($source);  
           $template->setModified();

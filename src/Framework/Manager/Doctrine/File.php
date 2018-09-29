@@ -39,9 +39,17 @@ class File
         
         $this->container = $container;
     }
-    public function add(string $mime_type,string $path,$data) : \Aspi\Framework\Entity\File{
+    public function add(string $mime_type,string $path,$data) 
+    {
         //Create Default Theme
-          $file = new   \Aspi\Framework\Entity\File();
+          if(!$this->container['isCMS'])
+          {
+            $file = new   \Aspi\Framework\Entity\File();
+          }
+          else
+          {
+            $file = new   \Aspi\CMS\Entity\File();
+          }
           $file->setData($data);
           $file->setPath($path);
           $file->setMimeType($mime_type);

@@ -51,7 +51,7 @@ class DoctrineServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container['SchemaManager'] = function (Container $container): \Aspi\Framework\Manager\Doctrine\Schema {
-          return new  \Aspi\Framework\Manager\Doctrine\Schema();
+          return new  \Aspi\Framework\Manager\Doctrine\Schema($container);
         };
         $container['TemplateManager'] = function (Container $container): \Aspi\Framework\Manager\Doctrine\Template {
          
@@ -109,14 +109,29 @@ class DoctrineServiceProvider implements ServiceProviderInterface
             );
             // now we want to register our application entities,
             // for that we need another metadata driver used for Entity namespace
+         
+            if($container['isCMS'])
+            {
+              $locations  = array( __DIR__.'/../../../../../../src/CMS/Entity');
+            }
+            else
+            {
+              $locations = array(__DIR__.'/../Entity');
+            }
             $annotationDriver = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver(
               $cachedAnnotationReader, // our cached annotation reader
-              array(__DIR__.'/../Entity') // paths to look in
+              $locations // paths to look in
             );
             // NOTE: driver for application Entity can be different, Yaml, Xml or whatever
             // register annotation driver for our application Entity fully qualified namespace
-            $driverChain->addDriver($annotationDriver, 'Aspi\Framework\Entity');
-            
+            if($container['isCMS'])
+            {
+              $driverChain->addDriver($annotationDriver, 'Aspi\CMS\Entity');
+            }
+            else
+            {
+              $driverChain->addDriver($annotationDriver, 'Aspi\Framework\Entity');
+            }
             // general ORM configuration
             $config = new \Doctrine\ORM\Configuration();
             $config->setProxyDir(sys_get_temp_dir());
