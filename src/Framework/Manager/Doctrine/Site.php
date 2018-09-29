@@ -38,7 +38,15 @@ class Site
     }
     public function add(string $domainName,string $routingString)
     {
-        $site = new \Aspi\Framework\Entity\Site();
+       
+        if(!$this->container['isCMS'])
+        {
+            $site = new \Aspi\Framework\Entity\Site();
+        }
+        else
+        {
+            $site = new \Aspi\CMS\Entity\Site();
+        }
         $site->setDomainName($domainName);
         $site-> setStatus(\Aspi\Framework\Entity\Site::STATUS_PUBLISHED);
         $site->setRouting($routingString);
