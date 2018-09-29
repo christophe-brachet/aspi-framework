@@ -76,10 +76,20 @@ class DoctrineServiceProvider implements ServiceProviderInterface
                 'user' => $container['DatabaseConfig']->get('user'),
                 'password' => $container['DatabaseConfig']->get('password')
             );
-            // ensure standard doctrine annotations are registered
-            \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
-                  __DIR__.'/../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
-            );
+            if($container['isCMS'])
+            {
+              // ensure standard doctrine annotations are registered
+              \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
+                  __DIR__.'/../../../../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+              );
+            }
+            else
+            {
+                  // ensure standard doctrine annotations are registered
+                  \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
+                    __DIR__.'/../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+                  );
+            }
             // Second configure ORM
             // globally used cache driver, in production use APC or memcached
             $cache = new \Doctrine\Common\Cache\ArrayCache();

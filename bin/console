@@ -48,7 +48,7 @@ if (PHP_SAPI == 'cli-server') {
         return false;
     }
 }
-$container = new Container(array());
+$container = new Container(array('isCMS'=>false));
 $container->register(new FileServiceProvider());
 $container->register(new SerializerServiceProvider());
 $container->register(new DoctrineServiceProvider()); 
