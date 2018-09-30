@@ -152,9 +152,9 @@ Step 7 - Go to application directy
 ```sh
 Brachets-Mac-mini:Desktop cbrachet$ cd aspi-app
 ```
-Step 8 - Publish site
+Step 8 - Init web application
 ```sh
-Brachets-Mac-mini:aspi-app cbrachet$ php bin/console aspi:publish-blank-website
+Brachets-Mac-mini:aspi-app cbrachet$ php bin/console aspi:init-app
 ```
 Step 9 - Start website
 ```sh
