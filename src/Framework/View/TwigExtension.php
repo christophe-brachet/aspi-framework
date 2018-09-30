@@ -52,7 +52,14 @@ class TwigExtension extends \Twig_Extension
     }
     public function aspiTitle()
     {
-        return  'Aspi Framework';
+        if(!$this->container['isCMS'])
+        {
+            return  'Aspi Framework';
+        }
+        else
+        {
+            return 'Aspi CMS';
+        }
     }
     public function render()
     {

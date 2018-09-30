@@ -74,7 +74,7 @@ class DoctrineTwigLoader implements \Twig_LoaderInterface
         
         $dbh = $this->container['em']->getConnection();
      
-            $sth = $dbh->prepare('SELECT source FROM templates WHERE name = :name');
+            $sth = $dbh->prepare('SELECT source FROM templates INNER JOIN themes ON templates.theme_id = themes.id  WHERE templates.name = :name');
             $sth->execute(array(':name' => (string) $name));
             return $sth->fetchColumn();
           

@@ -32,6 +32,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml as YamlParser;
+use Pimple\Container;
 
 /**
  * YamlFileLoader loads Yaml routing files.
@@ -49,10 +50,13 @@ class YamlDoctrineLoader
      * @var RouteGeneratorInterface
      */
     private $routeGenerator;
-    public function __construct()
+
+    private $container = null;
+    public function __construct(Container $container)
     {
 
         $this->routeGenerator = new I18nRouteGenerator();
+        $this->container = $container;
     }
     /**
      * Loads a Yaml file.
@@ -64,17 +68,19 @@ class YamlDoctrineLoader
      *
      * @throws \InvalidArgumentException When a route can't be parsed because YAML is invalid
      */
-    public function load($em,$isCMS,$domainName, $type = null)
+    public function load($domainName, $type = null)
     {
         $path = 'routing.yml';
-        if(!$isCMS)
+        if(!$this->container['isCMS'])
         {
     
-            $site = $em->getRepository('\Aspi\Framework\Entity\Site')->getByDomain($domainName);
+            $site = $this->container['em']->getRepository('\Aspi\Framework\Entity\Site')->getByDomain($domainName);
         }
         else
         {
-            $site = $em->getRepository('\Aspi\CMS\Entity\Site')->getByDomain($domainName);
+            $site = $this->container['em']->getRepository('\Aspi\CMS\Entity\Site')->getByDomain($domainName);
+            $this->container['theme'] = $site['name'];
+     
         }
         if(!$site)
         {

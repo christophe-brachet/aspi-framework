@@ -109,11 +109,13 @@ class WebServer extends \Swoole\Http\Server
         }
     }
      /**
+      * 
      * @param \swoole_http_request $req
      * @return \Psr\Http\Message\ServerRequestInterface
      */
     private function makePsrRequest(\swoole_http_request $req): \Psr\Http\Message\ServerRequestInterface
     {
+        
         //http://paul-m-jones.com/archives/6416
         $server = [];
         foreach ($req->server as $key => $value) {
@@ -129,7 +131,9 @@ class WebServer extends \Swoole\Http\Server
         $stream = new Stream('php://memory', 'wb+');
         $stream->write($req->rawContent());
         $stream->rewind();
-        $headers = ServerRequestFactory::marshalHeaders($server);
+        foreach ($req->header as $key => $value) {
+            $headers[strtoupper($key)] = $value;
+        }
         $request = new ServerRequest(
             $server,
             $files,

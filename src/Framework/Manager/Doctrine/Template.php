@@ -39,7 +39,7 @@ class Template
         
         $this->container = $container;
     }
-    public function add(string $name, string $source)
+    public function add(string $name, string $source, $theme=null)
     {
         //Create Default Theme
           if(!$this->container['isCMS'])
@@ -48,6 +48,17 @@ class Template
           }
           else {
             $template = new   \Aspi\CMS\Entity\Template(); 
+            if($theme !=null)
+            {
+                if(get_class($theme) == 'Aspi\CMS\Entity\Theme')
+                {
+                    $template->setTheme($theme);
+                }
+                else
+                {
+                 throw Exception('$theme parameter must be an instance of Aspi\CMS\Entity\Theme');
+                }
+            }
           }
           $template->setName($name);
           $template->setSource($source);  

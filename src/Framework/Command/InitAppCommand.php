@@ -163,23 +163,6 @@ class InitAppCommand extends Command
                               ->setRows($rows);
                         $table->render();
                         $this->container['DatabaseConfig']->writeFile($dbName,$userFramework,$passwordFramework);
-                        $templatesSeedingPath =__DIR__.'/../Seeding/Templates/';
-
-                        $source = __DIR__.'/../../../application/Seeding/Templates';
-                        $directoryIterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
-                        $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
-                        foreach ($iterator as $item)
-                        {
-                      
-                            if (!$item->isDir()&&!($item->getFileName()=='.DS_Store'))
-                            {
-                                $blob = file_get_contents($item->getRealpath());
-                                $this->container['TemplateManager']->add($iterator->getSubPathName(),$blob);
-                         
-                            }
-                                
-                            
-                        }
                         $source = __DIR__.'/../../../application/Seeding/Public';
                         $directoryIterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
                         $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
@@ -195,18 +178,45 @@ class InitAppCommand extends Command
                             }
                                 
                             
-                        }
-                        $routingPath = __DIR__.'/../../../application/Seeding/routing.yml';
-                        $blob = file_get_contents($routingPath);
-                       
+                        }  
+                        $theme = $this->container['ThemeManager']->createBlankTheme();
                         if($this->container['isCMS'])
                         {
-                           $theme = $this->container['ThemeManager']->createBlankTheme();
+                            $source = __DIR__.'/../../../../../../src/CMS/Themes/defaut/Templates';
+                        }
+                        else
+                        {
+                            $source = __DIR__.'/../../../application/Seeding/Templates';
+                        }
+                        $directoryIterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
+                        $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
+                        foreach ($iterator as $item)
+                        {
+                         
+                               if (!$item->isDir()&&!($item->getFileName()=='.DS_Store'))
+                               {
+                                   $blob = file_get_contents($item->getRealpath());
+                                   $this->container['TemplateManager']->add($iterator->getSubPathName(),$blob,$theme);
+                            
+                               }
+                                   
+                               
+                        }
+                        if($this->container['isCMS'])
+                        {
+                          
+
+                           $routingPath = __DIR__.'/../../../application/Seeding/routing.yml';
+                           $blob = file_get_contents($routingPath);
                            $this->container['SiteManager']->add($domainName,$blob,$theme);
                         }
                         else
                         {
-                            $this->container['SiteManager']->add($domainName,$blob);
+                           
+                           
+                            $routingPath = __DIR__.'/../../../application/Seeding/routing.yml';
+                            $blob = file_get_contents($routingPath);
+                            $this->container['SiteManager']->add($domainName,$blob,$theme);
                         }
                     
                     }

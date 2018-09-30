@@ -44,20 +44,45 @@ use Aspi\Framework\Doctrine\Routing\YamlDoctrineLoader;
 class  RoutingMiddleware implements MiddleWareInterface
 {
     private $container = null;
+    private $mode = null;
+    private $messageError='';
+    public function getMessageError($messageError)
+    {
+        if($this->mode != 'production')
+        {
+            return new HtmlResponse($messageError,500);
+        }
+        else
+        {
+            return new HtmlResponse($this->messageError,500);
+        }
+    }
     public function __construct(Container $container)
     {
        
         $this->container = $container;
+        $this->mode =  $this->container['HttpConfig']->get('mode');
+        if($this->mode == null)
+        {
+            $this->mode = 'development';
+        }
+        $this->messageError = '<h1>500 Server Error Oops, Something Went Wrong!</h1>Please contact the website administrator ';
+        $email =  $this->container['HttpConfig']->get('administrator_email');
+        if($email != null)
+        {
+            $this->messageError .= ': <a href="mailto:'.$email.'">Administrator</a> ('.$email.')';
+        }
+        $this->messageError .= '.';
+        
     }
     /**
      * @return ResponseInterface
      */
     public function __invoke(ServerRequestInterface $request, callable $next):ResponseInterface
     {
-
-        
-            $loader = new YamlDoctrineLoader();
-            $routes = $loader->load($this->container['em'],$this->container['isCMS'],'website.org');
+            $host  = $request->getUri()->getHost();
+            $loader = new YamlDoctrineLoader($this->container);
+            $routes = $loader->load($host);
             $context = new RequestContext();
             $matcher = new UrlMatcher($routes, $context);
             $generator = new UrlGenerator($routes, $context);
@@ -75,36 +100,41 @@ class  RoutingMiddleware implements MiddleWareInterface
       
                 if(!isset($parameters['_controller']))
                 {
-                    return new HtmlResponse('Inexistant controller',505);
+                    return $this->getMessageError('Inexistant controller');
                 }
-                $realController =  $parameters['_controller'];
-                $controllerChunks = explode("::",$realController);
+                $controller =  $parameters['_controller'];
+                $controllerChunks = explode("::",$controller);
                 if(count($controllerChunks)!=2)
                 {
-                    return new HtmlResponse('Controller poorly configured',505);
+                    return $this->getMessageError('Controller poorly configured');
                 }
       
-                $realController = $controllerChunks[0];
-                $controller = $realController.'Controller';
-                $this->container['Controller']=$realController;
-                $realAction =  $controllerChunks[1];
-                $this->container['Action'] = $realAction;
+                $this->container['Controller'] = $controllerChunks[0];
+                if(!$this->container['isCMS'])
+                {
+                    $controller =  $this->container['Controller'].'Controller';
+                }
+                else
+                {
+                    $controller =  '\\Aspi\\CMS'.$this->container['Controller'].'Controller';
+                }
+                $this->container['Action']  =  $controllerChunks[1];
                 try {
                     $reflector = new \ReflectionClass($controller);
 
                     if(!$reflector->hasMethod( "__construct" ))
                     {
-                        return new HtmlResponse('Controller: '.  $controller .' must have a constructeur.',505);
+                        return $this->getMessageError('Controller: '.  $controller .' must have a constructeur.');
                     }
                     $methodInstance = $reflector->getMethod('__construct');
                     if(!$methodInstance->isPublic())
                     {
-                        return new HtmlResponse('Controller: '.  $controller .' must have a public constructeur.',505);
+                        return $this->getMessageError('Controller: '.  $controller .' must have a public constructeur.');
                     }
                     $param = $reflector->getMethod('__construct')->getParameters();
                     if(count($param)!= 1)
                     {
-                        return new HtmlResponse('Constructor must contains a parameter.',505);
+                        return $this->getMessageError('Constructor must contains a parameter.');
                     }
                     $type = '';
                     if($param[0]->getClass()!=null)
@@ -113,21 +143,21 @@ class  RoutingMiddleware implements MiddleWareInterface
                     }
                     if($type != 'Pimple\Container')
                     {
-                        return new HtmlResponse('Constructor must take as parameter a object Pimple\Container.',505);
+                        return $this->getMessageError('Constructor must take as parameter a object Pimple\Container.');
                     }
-                    if(!$reflector->hasMethod($realAction))
+                    if(!$reflector->hasMethod($this->container['Action']))
                     {
-                        return new HtmlResponse('Inexistant action : '.$realAction,505);
+                        return $this->getMessageError('Inexistant action : '.$this->container['Action']);
                     }
-                    $methodInstance = $reflector->getMethod($realAction);
+                    $methodInstance = $reflector->getMethod($this->container['Action']);
                     if(!$methodInstance->isPublic())
                     {
-                        return new HtmlResponse('Action '.$realAction.' must be public.',505);
+                        return $this->getMessageError('Action '.$this->container['Action'].' must be public.');
                     }
-                    $param = $reflector->getMethod($realAction)->getParameters();
+                    $param = $reflector->getMethod($this->container['Action'])->getParameters();
                     if(count($param)!= 1)
                     {
-                        return new HtmlResponse('Action '.$realAction.' must contains a parameter.',505);
+                        return $this->getMessageError('Action '.$this->container['Action'].' must contains a parameter.');
                     }
                     $type = '';
                     if($param[0]->getClass()!=null)
@@ -136,7 +166,7 @@ class  RoutingMiddleware implements MiddleWareInterface
                     }
                     if($type != 'Psr\Http\Message\ServerRequestInterface')
                     {
-                        return new HtmlResponse('Action '.$realAction.' must contains a parameter.(Psr\Http\Message\ServerRequestInterface)',505);
+                        return $this->getMessageError('Action '.$this->container['Action'].' must contains a parameter.(Psr\Http\Message\ServerRequestInterface)');
                     }
                     unset($parameters['_controller']);
                     $locale = $parameters['_locale'];
@@ -151,18 +181,19 @@ class  RoutingMiddleware implements MiddleWareInterface
                     $response=  $methodInstance->invoke($instance, $request);
                     if($response == null)
                     {
-                        return new HtmlResponse('Action ' .$realAction.' must return something ...');
+                        return $this->getMessageError('Action ' .$this->container['Action'].' must return something ...');
                     }
                     if(gettype($response)=='object') 
                     {
                         if(get_class($response) != 'Zend\Diactoros\Response\HtmlResponse')
                         {
-                            return new HtmlResponse('Action ' .$realAction.' must return Zend\Diactoros\Response\HtmlResponse type');
+                            return $this->getMessageError('Action ' .$this->container['Action'].' must return Zend\Diactoros\Response\HtmlResponse type');
                         }
                     }
                     else
                     {
-                        return new HtmlResponse('Action ' .$realAction.' must return Zend\Diactoros\Response\HtmlResponse type');
+                        return $this->getMessageError('Action ' .$this->container['Action'].' must return Zend\Diactoros\Response\HtmlResponse type');
+                
                     }
                     return $response;
                     
@@ -172,9 +203,10 @@ class  RoutingMiddleware implements MiddleWareInterface
 
                 } catch (LogicException $ex) {
                     $output = $this->container['error']->handleException($ex);
-                    return new HtmlResponse($output, 500);
+                    return $this->getMessageError($output);
+                   
                 } catch (\ReflectionException $ex) {
-                    return new HtmlResponse('Inexistant controller : '.$realController,505);
+                    return $this->getMessageError('Inexistant controller : '. $controller);
                 }
                
             } catch (ResourceNotFoundException $exception) {
