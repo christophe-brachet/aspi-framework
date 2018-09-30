@@ -38,10 +38,10 @@ use Symfony\Component\Console\Helper\Table;
 
 
 
-class PublishWebSiteCommand extends Command
+class InitAppCommand extends Command
 {
     private $container = null;
-    private $title = 'ASPI - Command to publish a blank website';
+    private $title = 'ASPI - Command to init an application';
     public function __construct(Container $container)
     {
         parent::__construct();
@@ -51,14 +51,14 @@ class PublishWebSiteCommand extends Command
     {
         $this
         // the name of the command (the part after "bin/console")
-        ->setName('aspi:publish-blank-website')
+        ->setName('aspi:init-app')
 
         // the short description shown while running "php bin/console list"
         ->setDescription($this->title)
 
         // the full command description shown when running the command with
         // the "--help" option
-        ->setHelp('This command allows to publish a blank website');
+        ->setHelp('This command allows to init an application');
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -198,8 +198,16 @@ class PublishWebSiteCommand extends Command
                         }
                         $routingPath = __DIR__.'/../../../application/Seeding/routing.yml';
                         $blob = file_get_contents($routingPath);
-                        $this->container['SiteManager']->add($domainName,$blob);
-                
+                       
+                        if($this->container['isCMS'])
+                        {
+                           $theme = $this->container['ThemeManager']->createBlankTheme();
+                           $this->container['SiteManager']->add($domainName,$blob,$theme);
+                        }
+                        else
+                        {
+                            $this->container['SiteManager']->add($domainName,$blob);
+                        }
                     
                     }
                     catch (PDOException $err) {

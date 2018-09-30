@@ -23,7 +23,7 @@
 *SOFTWARE.
 *
 */
-namespace Aspi\Framework;
+namespace Aspi\Framework\Application;
 use Aspi\Framework\Protocole\Http\Middleware\MiddlewareInterface; 
 
 use Psr\Http\Message\ServerRequestInterface;
@@ -35,7 +35,7 @@ use Zend\Diactoros\Response\SapiEmitter;
 
 use Aspi\Framework\Protocole\Http\Middleware\RoutingMiddleware;
 
-class App implements  MiddlewareInterface
+class Kernel implements  MiddlewareInterface
 {
      /**
      * @var Middleware[]

@@ -28,7 +28,7 @@ use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Stream;
-use Aspi\Framework\App;
+use Aspi\Framework\Application\Kernel;
 use Pimple\Container;
 
 class WebServer extends \Swoole\Http\Server
@@ -56,7 +56,7 @@ class WebServer extends \Swoole\Http\Server
             //https://github.com/swoole/swoole-src/issues/559
             //$this->initSession($swooleRequest,$swooleResponse);
             $psrReq = $this->makePsrRequest($swooleRequest);
-            $app = new App($this->container);
+            $app = new Kernel($this->container);
             $psrRequest = $app->run($psrReq);
             $this->emitResponse($swooleResponse, $psrRequest);
     }  

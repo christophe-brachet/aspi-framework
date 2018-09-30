@@ -50,6 +50,7 @@ class DoctrineServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
+        
         $container['SchemaManager'] = function (Container $container): \Aspi\Framework\Manager\Doctrine\Schema {
           return new  \Aspi\Framework\Manager\Doctrine\Schema($container);
         };

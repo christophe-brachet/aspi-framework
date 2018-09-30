@@ -27,39 +27,7 @@
 if (@!include __DIR__ . '/../vendor/autoload.php') {
     die('Install packages using `composer install`');
 }
-use Pimple\Container;
-use Symfony\Component\Console\Application;
-use \Aspi\Framework\Command\WebServerCommand;
-use \Aspi\Framework\Command\PublishWebSiteCommand;
-use \Aspi\Framework\Provider\ConfigurationServiceProvider;
-use \Aspi\Framework\Provider\DoctrineServiceProvider;
-use \Aspi\Framework\Provider\ServerServiceProvider;
-use \Aspi\Framework\Provider\SerializerServiceProvider;
-use \Aspi\Framework\Provider\FileServiceProvider;
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-if (PHP_SAPI == 'cli-server') {
-    // To help the built-in PHP dev server, check if the request was actually for
-    // something which should probably be served as a static file
-    $url  = parse_url($_SERVER['REQUEST_URI']);
-    $file = __DIR__ . $url['path'];
-    if (is_file($file)) {
-        return false;
-    }
-}
-$container = new Container(array('isCMS'=>false));
-$container->register(new FileServiceProvider());
-$container->register(new SerializerServiceProvider());
-$container->register(new DoctrineServiceProvider()); 
-$container->register(new ConfigurationServiceProvider());
-$container->register(new ServerServiceProvider());
-
-
-
-//create console application
-$console = new Application();
-$console->add(new WebServerCommand($container));
-$console->add(new PublishWebSiteCommand($container));
+use Aspi\Framework\Application\Console;
+$console = new Console(false);
 $console->run();
 

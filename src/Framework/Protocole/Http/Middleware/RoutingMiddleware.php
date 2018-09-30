@@ -54,6 +54,8 @@ class  RoutingMiddleware implements MiddleWareInterface
      */
     public function __invoke(ServerRequestInterface $request, callable $next):ResponseInterface
     {
+
+        
             $loader = new YamlDoctrineLoader();
             $routes = $loader->load($this->container['em'],'website.org');
             $context = new RequestContext();

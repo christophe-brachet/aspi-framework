@@ -47,8 +47,28 @@ class  ErrorMiddleware implements MiddleWareInterface
         try {
             return $next($request);
         } catch (\Exception $e) {
-            $output = $this->container['error']->handleException($e);
-            return new HtmlResponse($output, 500);
+            $this->container['HttpConfig']->refresh();
+            $mode =  $this->container['HttpConfig']->get('mode');
+            if($mode == null)
+            {
+                $mode = 'development';
+            }
+            if($mode == 'production')
+            {
+                $content = '<h1>500 Server Error Oops, Something Went Wrong!</h1>Please contact the website administrator ';
+                $email =  $this->container['HttpConfig']->get('administrator_email');
+                if($email != null)
+                {
+                    $content .= ': <a href="mailto:'.$email.'">Administrator</a> ('.$email.')';
+                }
+                $content .= '.';
+                return new HtmlResponse($content, 500);
+            }
+            else
+            {
+                $output = $this->container['error']->handleException($e);
+                return new HtmlResponse($output, 500);
+            }
         }
     }
 

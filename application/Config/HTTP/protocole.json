@@ -1,1 +1,5 @@
-{"host":"127.0.0.1","port":8083,"cms":false}
+{ "host":"127.0.0.1",
+  "port":8083,
+  "mode":"production",
+  "administrator_email": "contact@brachet-breizh.fr"
+}
