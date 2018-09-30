@@ -65,8 +65,14 @@ class AssetsMiddleware
         }
 
         $path = $request->getUri()->getPath();
-        $fileObject = $this->container['em']->getRepository('\Aspi\Framework\Entity\File')->getByPath($path);
-    
+        if(!$this->container['isCMS'])
+        {
+            $fileObject = $this->container['em']->getRepository('\Aspi\Framework\Entity\File')->getByPath($path);
+        }
+        else
+        {
+            $fileObject = $this->container['em']->getRepository('\Aspi\CMS\Entity\File')->getByPath($path);
+        }
         if($fileObject)
         {
             $body = new Stream('php://temp', 'wb+');

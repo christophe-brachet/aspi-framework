@@ -64,10 +64,18 @@ class YamlDoctrineLoader
      *
      * @throws \InvalidArgumentException When a route can't be parsed because YAML is invalid
      */
-    public function load($em,$domainName, $type = null)
+    public function load($em,$isCMS,$domainName, $type = null)
     {
         $path = 'routing.yml';
-        $site = $em->getRepository('\Aspi\Framework\Entity\Site')->getByDomain($domainName);
+        if(!$isCMS)
+        {
+    
+            $site = $em->getRepository('\Aspi\Framework\Entity\Site')->getByDomain($domainName);
+        }
+        else
+        {
+            $site = $em->getRepository('\Aspi\CMS\Entity\Site')->getByDomain($domainName);
+        }
         if(!$site)
         {
             throw new \InvalidArgumentException(sprintf('File not found for domain "%s".', $domainName));

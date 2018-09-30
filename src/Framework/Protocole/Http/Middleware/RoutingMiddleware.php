@@ -57,7 +57,7 @@ class  RoutingMiddleware implements MiddleWareInterface
 
         
             $loader = new YamlDoctrineLoader();
-            $routes = $loader->load($this->container['em'],'website.org');
+            $routes = $loader->load($this->container['em'],$this->container['isCMS'],'website.org');
             $context = new RequestContext();
             $matcher = new UrlMatcher($routes, $context);
             $generator = new UrlGenerator($routes, $context);
