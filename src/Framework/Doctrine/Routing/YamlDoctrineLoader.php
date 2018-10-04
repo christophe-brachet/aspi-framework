@@ -71,13 +71,15 @@ class YamlDoctrineLoader
     public function load($domainName, $type = null)
     {
         $path = 'routing.yml';
+      
         if(!$this->container['isCMS'])
         {
-    
+          
             $site = $this->container['em']->getRepository('\Aspi\Framework\Entity\Site')->getByDomain($domainName);
         }
         else
         {
+          
             $site = $this->container['em']->getRepository('\Aspi\CMS\Entity\Site')->getByDomain($domainName);
             $this->container['theme'] = $site['name'];
      

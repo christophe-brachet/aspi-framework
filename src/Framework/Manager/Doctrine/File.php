@@ -39,6 +39,39 @@ class File
         
         $this->container = $container;
     }
+    public function copyDirectory()
+    {
+      if($this->container['theme']!=null)
+      {
+        if($this->container['isCMS'])
+        {
+          $sourceDir =  __DIR__.'/../../../../../../../src/CMS/Themes/'.$this->container['theme'].'/web';
+        }
+        else
+        {
+          $sourceDir = __DIR__.'/../../../../application/Seeding/Public';
+        }
+        if(file_exists($sourceDir))
+        {
+        
+          $directoryIterator = new \RecursiveDirectoryIterator($sourceDir, \RecursiveDirectoryIterator::SKIP_DOTS);
+          $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
+          foreach ($iterator as $item)
+          {
+    
+            if (!$item->isDir()&&!($item->getFileName()=='.DS_Store'))
+            {
+              $blob = file_get_contents($item->getRealpath());
+              $mime_type = \MimeType\MimeType::getType($item->getFileName());
+              $this->add($mime_type,'/'.$iterator->getSubPathName(),$blob);
+       
+            }
+              
+          
+          }
+        }
+      }  
+    }
     public function add(string $mime_type,string $path,$data) 
     {
         //Create Default Theme

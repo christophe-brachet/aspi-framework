@@ -163,45 +163,22 @@ class InitAppCommand extends Command
                               ->setRows($rows);
                         $table->render();
                         $this->container['DatabaseConfig']->writeFile($dbName,$userFramework,$passwordFramework);
-                        $source = __DIR__.'/../../../application/Seeding/Public';
-                        $directoryIterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
-                        $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
-                        foreach ($iterator as $item)
-                        {
-                      
-                            if (!$item->isDir()&&!($item->getFileName()=='.DS_Store'))
-                            {
-                                $blob = file_get_contents($item->getRealpath());
-                                $mime_type = \MimeType\MimeType::getType($item->getFileName());
-                                $this->container['FileManager']->add($mime_type,'/'.$iterator->getSubPathName(),$blob);
-                         
-                            }
-                                
-                            
-                        }  
-                        $theme = $this->container['ThemeManager']->createBlankTheme();
                         if($this->container['isCMS'])
                         {
-                            $source = __DIR__.'/../../../../../../src/CMS/Themes/defaut/Templates';
+                            $themes = array_values(preg_grep('/^([^.])/', scandir(__DIR__.'/../../../../../../src/CMS/Themes', SCANDIR_SORT_ASCENDING)));
+                            $question = new ChoiceQuestion(
+                                'Choose a theme',
+                                $themes,
+                                0
+                            );
+                            $question->setErrorMessage('Theme %s is invalid.');
+                            $this->container['theme'] = $helper->ask($input, $output, $question);
+                            $io->section('Creating theme ...');
+                            $theme = $this->container['ThemeManager']->createTheme();
+                           
                         }
-                        else
-                        {
-                            $source = __DIR__.'/../../../application/Seeding/Templates';
-                        }
-                        $directoryIterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
-                        $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
-                        foreach ($iterator as $item)
-                        {
-                         
-                               if (!$item->isDir()&&!($item->getFileName()=='.DS_Store'))
-                               {
-                                   $blob = file_get_contents($item->getRealpath());
-                                   $this->container['TemplateManager']->add($iterator->getSubPathName(),$blob,$theme);
-                            
-                               }
-                                   
-                               
-                        }
+                        $io->section('Copying public files ...');
+                        $this->container['FileManager']->copyDirectory();
                         if($this->container['isCMS'])
                         {
                           
