@@ -37,6 +37,7 @@
         "gedmo/doctrine-extensions": "^2.4",
         "popphp/pop-validator": "^3.0",
         "popphp/pop-dom": "^3.2",
-        "zendframework/zend-diactoros": "^1.8.6"
+        "zendframework/zend-diactoros": "^1.8.6",
+        "leafo/scssphp": "^0.7.7"
     }
 }
