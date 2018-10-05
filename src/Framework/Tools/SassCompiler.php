@@ -51,8 +51,9 @@ class SassCompiler
         // scssc will be loaded automatically via Composer
         $scss_compiler = new Compiler();
         $bootstrap_folder = __DIR__.'/../../../../../../node_modules/bootstrap/scss';
+        $flag_folder = __DIR__.'/../../../../../../node_modules/flag-icon-css/sass'; 
         // set the path where your _mixins are
-        $scss_compiler->setImportPaths(array($bootstrap_folder,$scss_folder));
+        $scss_compiler->setImportPaths(array($flag_folder,$bootstrap_folder,$scss_folder));
         // set css formatting (normal, nested or minimized), @see http://leafo.net/scssphp/docs/#output_formatting
          $scss_compiler->setFormatter('Leafo\ScssPhp\Formatter\Compressed');
         // get all .scss files from scss folder

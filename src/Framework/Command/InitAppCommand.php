@@ -63,6 +63,13 @@ class InitAppCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
             $io = new SymfonyStyle($input, $output);
+            $extensions  = get_loaded_extensions();
+            if(!in_array('PDO',$extensions) && !in_array('pdo_mysql', $extensions))
+            {
+                throw new \RuntimeException(
+                    'You need to install php pdo_mysql extension (http://php.net/manual/fr/pdo.installation.php).'
+                );
+            }
             $io->title($this->title);
             $helper = $this->getHelper('question');
             $question = new Question('Please enter database name : ', 'DBName');
@@ -179,6 +186,7 @@ class InitAppCommand extends Command
                         }
                         $io->section('Copying public files ...');
                         $this->container['FileManager']->copyDirectory();
+                        $this->container['Sass']->run(__DIR__.'/../../../../../../src/CMS/Themes/'.$this->container['theme'].'/sass');
                         if($this->container['isCMS'])
                         {
                           

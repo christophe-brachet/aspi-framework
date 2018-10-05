@@ -57,6 +57,18 @@ class WebServerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+        $extensions  = get_loaded_extensions();
+        if(!in_array('PDO',$extensions) && !in_array('pdo_mysql', $extensions))
+        {
+            throw new \RuntimeException(
+                'You need to install php pdo_mysql extension (http://php.net/manual/fr/pdo.installation.php).'
+            );
+        }
+        if (!in_array('swoole', $extensions)) {
+            throw new \RuntimeException(
+                'You need to install php swoole extension (https://www.swoole.co.uk/#get-started).'
+            );
+        }
         $port = $this->container['HttpConfig']->get('port'); 
         $host = $this->container['HttpConfig']->get('host'); 
         if(($host==null) && ($port==null))
@@ -75,6 +87,8 @@ class WebServerCommand extends Command
             return;
         }
         $io->success('ASPI Webserver is listening on '.$host.' : '.$port);
+        $io->text('Press Ctrl+C to stop Aspi WebServer');
+        $io->newLine();
         $this->container['WebServer']->start();
     }
 }

@@ -34,6 +34,7 @@ use \Aspi\Framework\Provider\DoctrineServiceProvider;
 use \Aspi\Framework\Provider\ServerServiceProvider;
 use \Aspi\Framework\Provider\SerializerServiceProvider;
 use \Aspi\Framework\Provider\FileServiceProvider;
+use \Aspi\Framework\Provider\SassServiceProvider;
 use \Aspi\CMS\Provider\CMSProvider;
 
 class Console extends \Symfony\Component\Console\Application
@@ -46,6 +47,7 @@ class Console extends \Symfony\Component\Console\Application
         $container->register(new SerializerServiceProvider());
         $container->register(new DoctrineServiceProvider()); 
         $container->register(new ConfigurationServiceProvider());
+        $container->register(new SassServiceProvider()); 
         if($isCMS)
         {
             $container->register(new CMSProvider());
