@@ -40,8 +40,16 @@ class LanguageServiceProvider implements \Pimple\ServiceProviderInterface
             $translator = new Translator( $container['Language']->get());
             $translator->addLoader('json', new JsonFileLoader());
             $translator->setFallbackLocales(['fr']);
-            $translator->addResource('json',  __DIR__.'/../../../application/Config/Translation/en.json', 'en');
-            $translator->addResource('json',  __DIR__.'/../../../application/Config/Translation/fr.json', 'fr');
+            if(!$container['isCMS'])
+            {
+                $translator->addResource('json',  __DIR__.'/../../../application/Config/Translation/en.json', 'en');
+                $translator->addResource('json',  __DIR__.'/../../../application/Config/Translation/fr.json', 'fr');
+            }
+            else
+            {
+                $translator->addResource('json',  __DIR__.'/../../../../../../src/CMS/Themes/'.$container['theme'].'/translation/en.json', 'en');
+                $translator->addResource('json',  __DIR__.'/../../../../../../src/CMS/Themes/'.$container['theme'].'/translation/fr.json', 'fr');
+            }
             return $translator;
         };
     
