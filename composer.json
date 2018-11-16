@@ -1,6 +1,6 @@
 {
     "name": "aspi-components/framework",
-    "description": "A standalone framework used in ASPI CMS",
+    "description": "A standalone framework used in ASPI CMF",
     "minimum-stability": "stable",
     "license": "MIT",
     "authors": [
