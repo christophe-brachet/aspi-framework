@@ -1,5 +1,5 @@
 # aspi-framework
-PHP Framework used in ASPI-CMS
+PHP Framework used in ASPI-CMF (Content Management Framework)
 # Installation
 
 Step 1 - Installer PHP 7.2 on your computer
