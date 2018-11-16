@@ -113,7 +113,7 @@ class DoctrineServiceProvider implements ServiceProviderInterface
          
             if($container['isCMS'])
             {
-              $locations  = array( __DIR__.'/../../../../../../src/CMS/Entity');
+              $locations  = array( __DIR__.'/../../../../../../src/CMS/Framework/Entity');
             }
             else
             {
@@ -127,7 +127,7 @@ class DoctrineServiceProvider implements ServiceProviderInterface
             // register annotation driver for our application Entity fully qualified namespace
             if($container['isCMS'])
             {
-              $driverChain->addDriver($annotationDriver, 'Aspi\CMS\Entity');
+              $driverChain->addDriver($annotationDriver, 'Aspi\CMS\Framework\Entity');
             }
             else
             {

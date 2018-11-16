@@ -110,13 +110,20 @@ class  RoutingMiddleware implements MiddleWareInterface
                 }
       
                 $this->container['Controller'] = $controllerChunks[0];
-                if(!$this->container['isCMS'])
+                $route =  $parameters['_route'];
+                $loginPages = array('loginpage.fr','loginpage.en');
+                if(!$this->container['isCMS']||in_array($route,$loginPages))
                 {
                     $controller =  $this->container['Controller'].'Controller';
                 }
                 else
                 {
-                    $controller =  '\\Aspi\\CMS'.$this->container['Controller'].'Controller';
+                
+                    $execCode =str_replace('<?php','',$this->container['hook']);
+                    unset($this->container['hook']);
+                    $execCode =str_replace('?>','',$execCode);
+                    eval($execCode);
+                    $controller =  '\\Aspi\\CMS\\Framework'.$this->container['Controller'].'Controller';
                 }
                 $this->container['Action']  =  $controllerChunks[1];
                 try {

@@ -51,7 +51,7 @@ class InitAppCommand extends Command
     {
         $this
         // the name of the command (the part after "bin/console")
-        ->setName('aspi:init-app')
+        ->setName('aspi:init')
 
         // the short description shown while running "php bin/console list"
         ->setDescription($this->title)
@@ -190,10 +190,11 @@ class InitAppCommand extends Command
                         if($this->container['isCMS'])
                         {
                           
-
-                           $routingPath = __DIR__.'/../../../application/Seeding/routing.yml';
-                           $blob = file_get_contents($routingPath);
-                           $this->container['SiteManager']->add($domainName,$blob,$theme);
+                           $routingTheme =__DIR__.'/../../../../../../src/CMS/Themes/'.$this->container['theme'].'/routing.yaml';
+                           $blob = file_get_contents($routingTheme);
+                           $hookPath =__DIR__.'/../../../../../../src/CMS/Themes/'.$this->container['theme'].'/src/hook.php';
+                           $hook = file_get_contents($hookPath);
+                           $this->container['SiteManager']->add($domainName,$blob,$theme,$hook);
                         }
                         else
                         {
@@ -201,7 +202,7 @@ class InitAppCommand extends Command
                            
                             $routingPath = __DIR__.'/../../../application/Seeding/routing.yml';
                             $blob = file_get_contents($routingPath);
-                            $this->container['SiteManager']->add($domainName,$blob,$theme);
+                            $this->container['SiteManager']->add($domainName,$blob);
                         }
                     
                     }

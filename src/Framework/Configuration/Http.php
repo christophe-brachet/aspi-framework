@@ -26,13 +26,28 @@
 declare(strict_types=1);
 namespace Aspi\Framework\Configuration;
 use Noodlehaus\Config;
+use \Pimple\Container;
 
 class Http
 {
+
+    private $container = null;
+    public function __construct(Container $container)
+    {
+      
+        $this->container = $container;
+    }
     public function refresh()
     {
-        $configDir = __DIR__.'/../../../application/Config/Http/';
-        $configFile =  $configDir.'protocole.json';
+       
+        if (!$this->container['isCMS'])
+        {
+             $configFile = __DIR__.'/../../../application/Config/HTTP/protocole.json';
+        }
+        else
+        {
+            $configFile = __DIR__.'/../../../../../../src/CMS/Config/cms.json';
+        }
         $this->conf = Config::load($configFile);
     }
     public function get(string $key)

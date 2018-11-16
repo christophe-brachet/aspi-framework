@@ -50,8 +50,7 @@ class WebServer extends \Swoole\Http\Server
     }
     public function onRequest(\swoole_http_request $swooleRequest, \swoole_http_response $swooleResponse)
     {
-
-    
+      
               //https://github.com/mcfog/lit-swan/blob/master/src/SwanServer.php
             //https://github.com/swoole/swoole-src/issues/559
             //$this->initSession($swooleRequest,$swooleResponse);

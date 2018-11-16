@@ -36,7 +36,7 @@ class Site
         
         $this->container = $container;
     }
-    public function add(string $domainName,string $routingString,$theme =null)
+    public function add(string $domainName,string $routingString,$theme =null,$hook=null)
     {
        
         if(!$this->container['isCMS'])
@@ -45,10 +45,10 @@ class Site
         }
         else
         {
-            $site = new \Aspi\CMS\Entity\Site();
+            $site = new \Aspi\CMS\Framework\Entity\Site();
             if($theme !=null)
             {
-                if(get_class($theme) == 'Aspi\CMS\Entity\Theme')
+                if(get_class($theme) == 'Aspi\CMS\Framework\Entity\Theme')
                 {
                     $site->setTheme($theme);
                 }
@@ -56,6 +56,10 @@ class Site
                 {
                  throw Exception('$theme parameter must be an instance of Aspi\CMS\Entity\Theme');
                 }
+            }
+            if($hook !=null)
+            {
+                $site->setHook($hook);
             }
         }
         $site->setDomainName($domainName);

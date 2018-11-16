@@ -46,6 +46,7 @@ class File
         if($this->container['isCMS'])
         {
           $sourceDir =  __DIR__.'/../../../../../../../src/CMS/Themes/'.$this->container['theme'].'/web';
+          echo $sourceDir;
         }
         else
         {
@@ -81,7 +82,7 @@ class File
           }
           else
           {
-            $file = new   \Aspi\CMS\Entity\File();
+            $file = new   \Aspi\CMS\Framework\Entity\File();
           }
           $file->setData($data);
           $file->setPath($path);

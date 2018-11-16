@@ -49,7 +49,7 @@ class Schema
    
         if($container['isCMS'])
         {
-          $locations =  array(__DIR__.'/../../../../../../../src/CMS/Entity');
+          $locations =  array(__DIR__.'/../../../../../../../src/CMS/Framework/Entity');
         }
         else
         {

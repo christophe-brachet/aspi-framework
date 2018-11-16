@@ -47,10 +47,10 @@ class Template
             $template = new   \Aspi\Framework\Entity\Template();
           }
           else {
-            $template = new   \Aspi\CMS\Entity\Template(); 
+            $template = new   \Aspi\CMS\Framework\Entity\Template(); 
             if($theme !=null)
             {
-                if(get_class($theme) == 'Aspi\CMS\Entity\Theme')
+                if(get_class($theme) == 'Aspi\CMS\Framework\Entity\Theme')
                 {
                     $template->setTheme($theme);
                 }

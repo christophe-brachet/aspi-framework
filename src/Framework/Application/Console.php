@@ -35,7 +35,7 @@ use \Aspi\Framework\Provider\ServerServiceProvider;
 use \Aspi\Framework\Provider\SerializerServiceProvider;
 use \Aspi\Framework\Provider\FileServiceProvider;
 use \Aspi\Framework\Provider\SassServiceProvider;
-use \Aspi\CMS\Provider\CMSProvider;
+use \Aspi\CMS\Framework\Provider\CMSProvider;
 
 class Console extends \Symfony\Component\Console\Application
 {

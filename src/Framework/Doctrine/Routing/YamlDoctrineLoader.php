@@ -80,8 +80,9 @@ class YamlDoctrineLoader
         else
         {
           
-            $site = $this->container['em']->getRepository('\Aspi\CMS\Entity\Site')->getByDomain($domainName);
+            $site = $this->container['em']->getRepository('\Aspi\CMS\Framework\Entity\Site')->getByDomain($domainName);
             $this->container['theme'] = $site['name'];
+            $this->container['hook'] = $site['hook'];
      
         }
         if(!$site)
@@ -92,7 +93,26 @@ class YamlDoctrineLoader
             $this->yamlParser = new YamlParser();
         }
         try {
-            $parsedConfig = $this->yamlParser->parse($site['routing']);
+$parsedString =<<<EOT
+homepage:
+    locales:  { en: "/welcome", fr: "/bienvenue", de: "/willkommen" }
+    defaults: { _controller: '\Controller\Home::Index'}
+
+page:
+    locales:  { en: "/page/", fr: "/bienvenue", de: "/willkommen" }
+    defaults: { _controller: '\Controller\Home::Index'}
+
+loginpage:
+    locales:  { en: "/login", fr: "/se-connecter"}    
+    defaults: { _controller: '\Controller\Home::Login' }
+
+admin:
+    path:     /admin
+    defaults: { _controller: 'App\Controller\DefaultController::default' }
+EOT;
+
+            $parsedString .=$site['routing'];
+            $parsedConfig = $this->yamlParser->parse($parsedString);
         } catch (ParseException $e) {
             throw new \InvalidArgumentException(sprintf('The file "%s" does not contain valid YAML.', $path), 0, $e);
         }

@@ -30,17 +30,23 @@ use Noodlehaus\Config;
 use \Pimple\Container;
 class Database
 {
-    private $configDir = __DIR__.'/../../../application/Config/Database/';
+    private $container = null;
     public function __construct(Container $container)
     {
-        
+      
         $this->container = $container;
     }
     public function refresh()
     {
         
-
-        $configFile =  $this->configDir.'connexion.json';
+        if (!$this->container['isCMS'])
+        {
+             $configFile = __DIR__.'/../../../application/Config/Database/connexion.json';
+        }
+        else
+        {
+            $configFile = __DIR__.'/../../../../../../src/CMS/Config/database.json';
+        }
         $this->conf = Config::load($configFile);
     }
     public function get(string $key)
@@ -62,15 +68,24 @@ class Database
         $this->container['DatabaseConfigModel']->setPassword($passwordFramework);
         $this->container['DatabaseConfigModel']->setDbname($dbname);
         $jsonContent = $this->container['Serializer']->serialize($this->container['DatabaseConfigModel'], 'json');
-        if(!$this->container['FileSystem']->exists($this->configDir))
+        if (!$this->container['isCMS'])
+        {
+            $configDir = __DIR__.'/../../../application/Config/Database/';
+        }
+        else
+        {
+            $configDir = __DIR__.'/../../../../../../src/CMS/Config/';
+        }
+        if(!$this->container['FileSystem']->exists($configDir))
         {
             try {
-                $this->container['FileSystem']->mkdir($this->configDir);
+                $this->container['FileSystem']->mkdir($configDir);
             } catch (IOExceptionInterface $exception) {
                 echo "An error occurred while creating your directory at ".$exception->getPath();
             }
         }
-        $configFile =  $this->configDir.'connexion.json';
+        $configFile = $configDir.'database.json';
+      
         $this->container['FileSystem']->touch($configFile);
         $this->container['FileSystem']->dumpFile($configFile,  $jsonContent);
     }

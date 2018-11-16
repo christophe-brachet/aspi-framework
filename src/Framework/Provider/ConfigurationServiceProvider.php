@@ -37,7 +37,7 @@ class ConfigurationServiceProvider implements ServiceProviderInterface
     public function register(\Pimple\Container $container)
     {
         $container['HttpConfig'] = function (Container $container): \Aspi\Framework\Configuration\Http {
-            return new \Aspi\Framework\Configuration\Http();
+            return new \Aspi\Framework\Configuration\Http($container);
         };
         $container['DatabaseConfig'] = function (Container $container): \Aspi\Framework\Configuration\Database {
             return new \Aspi\Framework\Configuration\Database($container);

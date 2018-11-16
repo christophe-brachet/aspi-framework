@@ -57,7 +57,7 @@ class AssetsMiddleware
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function __invoke(ServerRequestInterface $request, callable $next):ResponseInterface{
-
+    
         $isCms =false;
         if($this->container['HttpConfig']->get('cms')!=null)
         {
@@ -67,11 +67,12 @@ class AssetsMiddleware
         $path = $request->getUri()->getPath();
         if(!$this->container['isCMS'])
         {
+  
             $fileObject = $this->container['em']->getRepository('\Aspi\Framework\Entity\File')->getByPath($path);
         }
         else
         {
-            $fileObject = $this->container['em']->getRepository('\Aspi\CMS\Entity\File')->getByPath($path);
+            $fileObject = $this->container['em']->getRepository('\Aspi\CMS\Framework\Entity\File')->getByPath($path);
         }
         if($fileObject)
         {

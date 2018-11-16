@@ -58,7 +58,14 @@ class TwigExtension extends \Twig_Extension
         }
         else
         {
-            return 'Aspi CMS';
+            if($this->container['HttpConfig']->get('aspi_title')!=NULL)
+            {
+                return $this->container['HttpConfig']->get('aspi_title');
+            }
+            else
+            {
+                return 'Aspi CMS';
+            }
         }
     }
     public function render()
