@@ -1,5 +1,5 @@
 {
-    "name": "aspi/components/framework",
+    "name": "aspi-cmf-components/framework",
     "description": "A standalone framework used in ASPI CMF",
     "minimum-stability": "stable",
     "license": "MIT",
