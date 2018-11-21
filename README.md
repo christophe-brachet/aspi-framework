@@ -154,7 +154,7 @@ Brachets-Mac-mini:Desktop cbrachet$ cd aspi-app
 ```
 Step 8 - Init web application
 ```sh
-Brachets-Mac-mini:aspi-app cbrachet$ php bin/console aspi:init-app
+Brachets-Mac-mini:aspi-app cbrachet$ php bin/console aspi:init
 ```
 Step 9 - Start website
 ```sh
